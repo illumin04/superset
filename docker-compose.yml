@@ -188,6 +188,20 @@ services:
         required: false
     volumes: *superset-volumes
 
+    develop:
+      watch:
+        - action: sync
+          path: ./superset-frontend/src
+          target: /app/superset-frontend/src
+        - action: sync
+          path: ./superset-frontend/plugins
+          target: /app/superset-frontend/plugins
+        - action: sync
+          path: ./superset-frontend/package.json
+          target: /app/superset-frontend/package.json
+        - action: rebuild
+          path: ./superset-frontend/package-lock.json
+
   superset-worker:
     build:
       <<: *common-build

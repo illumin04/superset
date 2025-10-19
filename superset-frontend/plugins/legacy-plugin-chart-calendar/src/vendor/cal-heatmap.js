@@ -2727,7 +2727,7 @@ CalHeatMap.prototype = {
       stop = new Date(start);
       stop = stop.setMonth(stop.getMonth() + range);
     }
-    console.log("######hello world");
+    console.log("######hello world hot reloading");
     console.log("######start, stop", start, new Date(stop));
     return d3.time.months(Math.min(start, stop), Math.max(start, stop));
   },
