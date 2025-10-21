@@ -2718,18 +2718,28 @@ CalHeatMap.prototype = {
    */
   getMonthDomain: function (d, range) {
     'use strict';
-
-    var start = new Date(d.getFullYear(), d.getMonth());
-    var stop = null;
-    if (range instanceof Date) {
-      stop = new Date(range.getFullYear(), range.getMonth());
-    } else {
-      stop = new Date(start);
-      stop = stop.setMonth(stop.getMonth() + range);
-    }
-    console.log("######hello world hot reloading");
-    console.log("######start, stop", start, new Date(stop));
-    return d3.time.months(Math.min(start, stop), Math.max(start, stop));
+  console.log('###### Version 5');
+  var start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
+  var stopInclusive;
+  if (range instanceof Date) {
+    stopInclusive = new Date(Date.UTC(range.getUTCFullYear(), range.getUTCMonth(), 1));
+  } else {
+    stopInclusive = new Date(start);
+    stopInclusive.setUTCMonth(stopInclusive.getUTCMonth() + (range - 1));
+  }
+  var stopExclusive = new Date(stopInclusive);
+  stopExclusive.setUTCMonth(stopExclusive.getUTCMonth() + 1);
+  var from = (start <= stopExclusive) ? start : stopExclusive;
+  var to = (start <= stopExclusive) ? stopExclusive : start;
+  /*
+  console.log('start(inc):', start.toISOString());
+  console.log('stop(inc):', stopInclusive.toISOString());
+  console.log('to(excl):', to.toISOString());
+  var months = d3.time.months(from, to);
+  console.log('months returned:', months.map(m => m.toISOString()));
+  return months;
+  */
+  return d3.time.months(from, to);
   },
 
   /**
